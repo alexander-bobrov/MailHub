@@ -18,7 +18,7 @@ namespace MailHub.Services.CleanupService
         private readonly CleanupOptions options;
         private Timer timer = null;
 
-        public CleanupService(IDbContextFactory<MailHubContext> dbFactory, ILogger<CleanupService> logger, IOptions<CleanupOptions> options)
+        public CleanupService(ILogger<CleanupService> logger, IOptions<CleanupOptions> options, IDbContextFactory<MailHubContext> dbFactory)
         {
             this.dbFactory = dbFactory;
             this.logger = logger;

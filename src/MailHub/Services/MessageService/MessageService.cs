@@ -22,21 +22,20 @@ namespace MailHub.Services.MessageService
         {
             using var db = dbFactory.CreateDbContext();
             //todo slow but OK for now
-
             var sw = new Stopwatch();
             sw.Start();
             var messages = db.Messages.AsNoTracking().Where(x => x.From.Contains(authorNameOrEmail))
-              .OrderByDescending(o => o.CreatedAtUtc)
-              .Select(m => new Message
-              {
-                  From = m.From,
-                  To = m.To,
-                  Text = m.Text,
-                  Html = m.Html,
-              });
+                .OrderByDescending(o => o.CreatedAtUtc)
+                .Select(m => new Message
+                {
+                    From = m.From,
+                    To = m.To,
+                    Text = m.Text,
+                    Html = m.Html,
+                });
             var result = await messages.ToArrayAsync();
             sw.Stop();
-  
+
             logger.LogInformation($"{result.Length} messages have been retrieved from DB for {sw.ElapsedMilliseconds}ms");
             return result;
         }

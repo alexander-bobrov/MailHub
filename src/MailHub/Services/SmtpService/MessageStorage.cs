@@ -36,7 +36,7 @@ namespace MailHub.Services.MailService
                 db.Messages.Add(new Database.Entities.MessageEntity
                 {
                     From = message.From.ToString(),
-                    To = message.To[0].ToString(),
+                    To = message.To.ToString(),
                     Text = message.TextBody,
                     Html = message.HtmlBody
 
