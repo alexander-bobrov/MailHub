@@ -18,6 +18,21 @@ namespace MailHub.Services.MessageService
             this.dbFactory = dbFactory;
             this.logger = logger;
         }
+
+        public async Task<Message[]> GetAll()
+        {
+            using var db = dbFactory.CreateDbContext();
+
+            var messages = db.Messages.AsNoTracking().Select(m => new Message
+            {
+                From = m.From,
+                To = m.To,
+                Text = m.Text,
+                Html = m.Html,
+            });
+
+            return await messages.ToArrayAsync();
+        }
         public async Task<Message[]> GetBasedOnAuthor(string authorNameOrEmail)
         {
             using var db = dbFactory.CreateDbContext();

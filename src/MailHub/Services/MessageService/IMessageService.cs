@@ -9,5 +9,6 @@ namespace MailHub.Services.MessageService
 
         Task<Message[]> GetBasedOnRecipient(string recipientPart);
 
+        Task<Message[]> GetAll();
     }
 }

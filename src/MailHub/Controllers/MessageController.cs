@@ -35,6 +35,14 @@ namespace MailHub.Controllers
             var messages = await messageService.GetBasedOnRecipient(filter);
             return Ok(messages);
         }
+
+        [HttpGet("get-all-messages")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<IActionResult> GetAll()
+        {
+            var messages = await messageService.GetAll();
+            return Ok(messages);
+        }
     }
 
 }
