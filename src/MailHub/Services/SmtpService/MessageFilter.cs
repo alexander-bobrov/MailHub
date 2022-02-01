@@ -1,4 +1,5 @@
-﻿using SmtpServer;
+﻿using Microsoft.Extensions.Logging;
+using SmtpServer;
 using SmtpServer.Mail;
 using SmtpServer.Storage;
 using System.Linq;
@@ -10,10 +11,12 @@ namespace MailHub.Services.SmtpService
     public class MessageFilter : IMailboxFilter
     {
         private readonly string[] allowedDomains;
+        private readonly ILogger<MessageFilter> logger;
 
-        public MessageFilter(string[] allowedDomains)
+        public MessageFilter(string[] allowedDomains, ILogger<MessageFilter> logger)
         {
             this.allowedDomains = allowedDomains;
+            this.logger = logger;
         }
         public Task<MailboxFilterResult> CanAcceptFromAsync(ISessionContext context, IMailbox @from, int size, CancellationToken token)
         {
@@ -22,6 +25,7 @@ namespace MailHub.Services.SmtpService
                 return Task.FromResult(MailboxFilterResult.Yes);
             }
 
+            logger.LogInformation($"Message from {from.User} has been declined");
             return Task.FromResult(MailboxFilterResult.NoPermanently);
         }
 
