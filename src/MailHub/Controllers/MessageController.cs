@@ -22,17 +22,17 @@ namespace MailHub.Controllers
 
         [HttpGet("get-messages-by-author")]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<IActionResult> GetByAuthor(string filter)
+        public async Task<IActionResult> GetByAuthor(string filter, string subject)
         {
-            var messages = await messageService.GetBasedOnAuthor(filter);
+            var messages = await messageService.GetBasedOnAuthor(filter, subject);
             return Ok(messages);
         }
 
         [HttpGet("get-messages-by-recipient")]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<IActionResult> GetByRecipient(string filter)
+        public async Task<IActionResult> GetByRecipient(string filter, string subject)
         {
-            var messages = await messageService.GetBasedOnRecipient(filter);
+            var messages = await messageService.GetBasedOnRecipient(filter, subject);
             return Ok(messages);
         }
 

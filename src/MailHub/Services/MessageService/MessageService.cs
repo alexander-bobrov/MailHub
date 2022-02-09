@@ -34,13 +34,13 @@ namespace MailHub.Services.MessageService
 
             return await messages.ToArrayAsync();
         }
-        public async Task<Message[]> GetBasedOnAuthor(string authorNameOrEmail)
+        public async Task<Message[]> GetBasedOnAuthor(string authorNameOrEmail, string subject)
         {
             using var db = dbFactory.CreateDbContext();
             //todo slow but OK for now
             var sw = new Stopwatch();
             sw.Start();
-            var messages = db.Messages.AsNoTracking().Where(x => x.From.Contains(authorNameOrEmail))
+            var messages = db.Messages.AsNoTracking().Where(x => x.From.Contains(authorNameOrEmail) && x.Subject.Contains(subject))
                 .OrderByDescending(o => o.CreatedAtUtc)
                 .Select(m => new Message
                 {
@@ -57,13 +57,13 @@ namespace MailHub.Services.MessageService
             return result;
         }
 
-        public async Task<Message[]> GetBasedOnRecipient(string recipientNameOrEmail)
+        public async Task<Message[]> GetBasedOnRecipient(string recipientNameOrEmail, string subject)
         {
             using var db = dbFactory.CreateDbContext();
             //todo slow but OK for now
             var sw = new Stopwatch();
             sw.Start();
-            var messages = db.Messages.AsNoTracking().Where(x => x.To.Contains(recipientNameOrEmail))
+            var messages = db.Messages.AsNoTracking().Where(x => x.To.Contains(recipientNameOrEmail) && x.Subject.Contains(subject))
                 .OrderByDescending(o => o.CreatedAtUtc)
                 .Select(m => new Message
                 {
