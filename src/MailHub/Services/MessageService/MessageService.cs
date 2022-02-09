@@ -29,6 +29,7 @@ namespace MailHub.Services.MessageService
                 To = m.To,
                 Text = m.Text,
                 Html = m.Html,
+                Subject = m.Subject,
             });
 
             return await messages.ToArrayAsync();
@@ -47,6 +48,7 @@ namespace MailHub.Services.MessageService
                     To = m.To,
                     Text = m.Text,
                     Html = m.Html,
+                    Subject = m.Subject,
                 });
             var result = await messages.ToArrayAsync();
             sw.Stop();
@@ -69,6 +71,7 @@ namespace MailHub.Services.MessageService
                     To = m.To,
                     Text = m.Text,
                     Html = m.Html,
+                    Subject = m.Subject,
                 });
             var result = await messages.ToArrayAsync();
             sw.Stop();

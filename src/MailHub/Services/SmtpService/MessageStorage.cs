@@ -40,6 +40,8 @@ namespace MailHub.Services.MailService
                     To = message.To.ToString(),
                     Text = message.TextBody,
                     Html = message.HtmlBody,
+                    Subject = message.Subject,
+                    
                     CreatedAtUtc = DateTime.UtcNow
 
                 });
