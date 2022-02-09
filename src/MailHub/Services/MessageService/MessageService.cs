@@ -8,7 +8,7 @@ using MailHub.Services.MessageService.Models;
 
 namespace MailHub.Services.MessageService
 {
-    public class MessageService : IMessageService
+    public class MessageService
     {
         private readonly IDbContextFactory<MailHubContext> dbFactory;
         private readonly ILogger<MessageService> logger;

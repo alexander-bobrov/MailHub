@@ -12,9 +12,9 @@ namespace MailHub.Controllers
     public class MessagesController : ControllerBase
     {
         private readonly ILogger<MessagesController> logger;
-        private readonly IMessageService messageService;
+        private readonly MessageService messageService;
 
-        public MessagesController(ILogger<MessagesController> logger, IMessageService messageService)
+        public MessagesController(ILogger<MessagesController> logger, MessageService messageService)
         {
             this.logger = logger;
             this.messageService = messageService;

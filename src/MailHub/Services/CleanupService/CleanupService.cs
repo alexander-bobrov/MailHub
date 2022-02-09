@@ -35,17 +35,15 @@ namespace MailHub.Services.CleanupService
 
         private async void Cleanup(object state)
         {
-            using (var db = dbFactory.CreateDbContext())
+            using var db = dbFactory.CreateDbContext();
+
+            var messagesToDelete = db.Messages.Where(x => x.CreatedAtUtc.AddHours(options.RetentionPeriodInHours) > DateTime.UtcNow);
+            foreach (var message in messagesToDelete)
             {
-
-                var messagesToDelete = db.Messages.Where(x => x.CreatedAtUtc.AddHours(options.RetentionPeriodInHours) > DateTime.UtcNow);
-                foreach (var message in messagesToDelete)
-                {
-                    db.Messages.Remove(message);
-                }
-
-                await db.SaveChangesAsync();
+                db.Messages.Remove(message);
             }
+
+            await db.SaveChangesAsync();
         }
 
         public Task StopAsync(CancellationToken cancellationToken)

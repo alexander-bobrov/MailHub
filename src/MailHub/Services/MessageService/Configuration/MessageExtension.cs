@@ -1,6 +1,5 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using MailHub.Services.MessageService;
 
 namespace MailHub.Services.CleanupService.Configuration
 {
@@ -8,7 +7,7 @@ namespace MailHub.Services.CleanupService.Configuration
     {
         public static void UseMessageService(this IServiceCollection services, IConfiguration configuration)
         {
-            services.AddScoped<IMessageService, MessageService.MessageService>();
+            services.AddScoped<MessageService.MessageService>();
         }
     }
 }

@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using SmtpServer;
 using SmtpServer.Protocol;
 using SmtpServer.Storage;
+using System;
 using System.Buffers;
 using System.IO;
 using System.Threading;
@@ -38,7 +39,8 @@ namespace MailHub.Services.MailService
                     From = message.From.ToString(),
                     To = message.To.ToString(),
                     Text = message.TextBody,
-                    Html = message.HtmlBody
+                    Html = message.HtmlBody,
+                    CreatedAtUtc = DateTime.UtcNow
 
                 });
 
