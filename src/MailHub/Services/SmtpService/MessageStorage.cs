@@ -1,5 +1,6 @@
 ﻿using Database;
 using Microsoft.EntityFrameworkCore;
+using MimeKit;
 using SmtpServer;
 using SmtpServer.Protocol;
 using SmtpServer.Storage;
@@ -31,13 +32,18 @@ namespace MailHub.Services.MailService
 
             stream.Position = 0;
             var message = await MimeKit.MimeMessage.LoadAsync(stream, cancellationToken);
-
+           
             using (var db = dbFactory.CreateDbContext())
             {
+                var from = message.From[0] as MailboxAddress;
+                var to = message.To[0] as MailboxAddress;
+
                 db.Messages.Add(new Database.Entities.MessageEntity
                 {
-                    From = message.From.ToString(),
-                    To = message.To.ToString(),
+                    FromName = from.Name,
+                    FromAddress = from.Address,
+                    ToName = to.Name,
+                    ToAddress = to.Address,
                     Text = message.TextBody,
                     Html = message.HtmlBody,
                     Subject = message.Subject,

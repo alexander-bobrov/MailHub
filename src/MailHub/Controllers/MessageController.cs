@@ -22,20 +22,21 @@ namespace MailHub.Controllers
 
         [HttpGet("get-messages-by-author")]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<IActionResult> GetByAuthor(string filter, string subject)
+        public async Task<IActionResult> GetByAuthor(string address, string subject)
         {
-            var messages = await messageService.GetBasedOnAuthor(filter, subject);
+            var messages = await messageService.GetBasedOnAuthor(address, subject);
             return Ok(messages);
         }
 
         [HttpGet("get-messages-by-recipient")]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<IActionResult> GetByRecipient(string filter, string subject)
+        public async Task<IActionResult> GetByRecipient(string address, string subject)
         {
-            var messages = await messageService.GetBasedOnRecipient(filter, subject);
+            var messages = await messageService.GetBasedOnRecipient(address, subject);
             return Ok(messages);
         }
 
+#if DEBUG
         [HttpGet("get-all-messages")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<IActionResult> GetAll()
@@ -43,6 +44,6 @@ namespace MailHub.Controllers
             var messages = await messageService.GetAll();
             return Ok(messages);
         }
+#endif
     }
-
 }

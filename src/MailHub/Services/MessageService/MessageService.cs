@@ -25,8 +25,8 @@ namespace MailHub.Services.MessageService
 
             var messages = db.Messages.AsNoTracking().Select(m => new Message
             {
-                From = m.From,
-                To = m.To,
+                From = new Person { Name = m.FromName, Address = m.FromAddress},
+                To = new Person { Name = m.ToName, Address = m.ToAddress },
                 Text = m.Text,
                 Html = m.Html,
                 Subject = m.Subject,
@@ -34,18 +34,18 @@ namespace MailHub.Services.MessageService
 
             return await messages.ToArrayAsync();
         }
-        public async Task<Message[]> GetBasedOnAuthor(string authorNameOrEmail, string subject)
+        public async Task<Message[]> GetBasedOnAuthor(string authorEmail, string subject)
         {
             using var db = dbFactory.CreateDbContext();
             //todo slow but OK for now
             var sw = new Stopwatch();
             sw.Start();
-            var messages = db.Messages.AsNoTracking().Where(x => x.From.Contains(authorNameOrEmail) && x.Subject.Contains(subject))
+            var messages = db.Messages.AsNoTracking().Where(x => x.FromAddress == authorEmail && x.Subject == subject)
                 .OrderByDescending(o => o.CreatedAtUtc)
                 .Select(m => new Message
                 {
-                    From = m.From,
-                    To = m.To,
+                    From = new Person { Name = m.FromName, Address = m.FromAddress },
+                    To = new Person { Name = m.ToName, Address = m.ToAddress },
                     Text = m.Text,
                     Html = m.Html,
                     Subject = m.Subject,
@@ -57,18 +57,18 @@ namespace MailHub.Services.MessageService
             return result;
         }
 
-        public async Task<Message[]> GetBasedOnRecipient(string recipientNameOrEmail, string subject)
+        public async Task<Message[]> GetBasedOnRecipient(string recipientEmail, string subject)
         {
             using var db = dbFactory.CreateDbContext();
             //todo slow but OK for now
             var sw = new Stopwatch();
             sw.Start();
-            var messages = db.Messages.AsNoTracking().Where(x => x.To.Contains(recipientNameOrEmail) && x.Subject.Contains(subject))
+            var messages = db.Messages.AsNoTracking().Where(x => x.ToAddress == recipientEmail && x.Subject == subject)
                 .OrderByDescending(o => o.CreatedAtUtc)
                 .Select(m => new Message
                 {
-                    From = m.From,
-                    To = m.To,
+                    From = new Person { Name = m.FromName, Address = m.FromAddress },
+                    To = new Person { Name = m.ToName, Address = m.ToAddress },
                     Text = m.Text,
                     Html = m.Html,
                     Subject = m.Subject,
