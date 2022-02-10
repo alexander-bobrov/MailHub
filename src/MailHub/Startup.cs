@@ -6,6 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 using MailHub.Services.CleanupService.Configuration;
 using MailHub.Services.MailService.Configuration;
 using MailHub.Configuration;
+using System.Net;
 
 namespace MailHub
 {
@@ -28,6 +29,12 @@ namespace MailHub
 
             services.AddControllers();
             services.AddSwagger();
+
+            services.AddHttpsRedirection(options =>
+            {
+                options.RedirectStatusCode = (int)HttpStatusCode.TemporaryRedirect;
+                options.HttpsPort = 5001;
+            });
         }
         
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
