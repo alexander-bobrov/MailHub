@@ -31,7 +31,7 @@ namespace MailHub.Services.MailService
             }
 
             stream.Position = 0;
-            var message = await MimeKit.MimeMessage.LoadAsync(stream, cancellationToken);
+            var message = await MimeMessage.LoadAsync(stream, cancellationToken);
            
             using (var db = dbFactory.CreateDbContext())
             {
