@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Database.Entities
+﻿namespace Database.Entities
 {
     public class MessageEntity : BaseEntity
     {
@@ -11,6 +9,7 @@ namespace Database.Entities
         public string Subject { get; set; }
         public string Text { get; set; }
         public string Html { get;set; }
+        public AttachmentEntity[] Attachments { get; set; }
 
     }
 

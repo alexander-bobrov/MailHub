@@ -46,7 +46,13 @@ namespace MailHub.Services.MessageService
                     Text = m.Text,
                     Html = m.Html,
                     Subject = m.Subject,
-                });
+                    Attachments = m.Attachments.Select(x => new Attachment
+                    {
+                        ContentId = x.ContentId,
+                        Filename = x.Filename,
+                        ContentType = x.ContentType,
+                    }).ToArray()
+                });;
     
             sw.Stop();
             var result = await messages.ToArrayAsync();

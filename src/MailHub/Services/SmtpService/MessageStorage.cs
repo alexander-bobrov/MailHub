@@ -1,4 +1,5 @@
 ﻿using Database;
+using Database.Entities;
 using Microsoft.EntityFrameworkCore;
 using MimeKit;
 using SmtpServer;
@@ -7,6 +8,7 @@ using SmtpServer.Storage;
 using System;
 using System.Buffers;
 using System.IO;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -37,8 +39,14 @@ namespace MailHub.Services.MailService
             {
                 var from = message.From[0] as MailboxAddress;
                 var to = message.To[0] as MailboxAddress;
+                var attachments = message.Attachments.Select(x => new AttachmentEntity
+                {       
+                    ContentId = x.ContentId,
+                    Filename = x.ContentType?.Name,
+                    ContentType = x.ContentType?.Format,
+                }).ToArray();
 
-                db.Messages.Add(new Database.Entities.MessageEntity
+                db.Messages.Add(new MessageEntity
                 {
                     FromName = from.Name,
                     FromAddress = from.Address,
@@ -47,7 +55,8 @@ namespace MailHub.Services.MailService
                     Text = message.TextBody,
                     Html = message.HtmlBody,
                     Subject = message.Subject,
-                    
+                    Attachments = attachments,
+
                     CreatedAtUtc = DateTime.UtcNow
 
                 });
