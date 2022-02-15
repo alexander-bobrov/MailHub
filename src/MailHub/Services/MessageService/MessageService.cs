@@ -52,7 +52,7 @@ namespace MailHub.Services.MessageService
                         Filename = x.Filename,
                         ContentType = x.ContentType,
                     }).ToArray()
-                });;
+                });
     
             sw.Stop();
             var result = await messages.ToArrayAsync();
