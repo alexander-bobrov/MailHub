@@ -21,6 +21,7 @@ namespace MailHub.Services.SmtpService
         {
             if (allowedDomains.Any(x => x.Equals(from.Host)))
             {
+                Log.Information($"Message from {from.User} {from.Host} was acepted");
                 return Task.FromResult(MailboxFilterResult.Yes);
             }
 
