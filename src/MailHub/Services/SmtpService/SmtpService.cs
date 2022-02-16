@@ -31,7 +31,7 @@ namespace MailHub.Services.MailService
             this.dbFactory = dbFactory;
         }
 
-        public  Task StartAsync(CancellationToken cancellationToken)
+        public Task StartAsync(CancellationToken cancellationToken)
         {
             var options = new SmtpServerOptionsBuilder()
             .ServerName(this.options.ServerName)
@@ -46,7 +46,12 @@ namespace MailHub.Services.MailService
             server = new SmtpServer.SmtpServer(options, sp);
 
             //idk why but it's a blocking call so
-            server.StartAsync(cancellationToken);
+            var task = server.StartAsync(cancellationToken);
+            if (task.IsFaulted)
+            {
+                logger.LogCritical(task.Exception.ToString());
+                throw task.Exception;
+            }
             logger.LogInformation("Smtp server has been started and ready to recieve e-mails");
 
             return Task.CompletedTask;

@@ -16,7 +16,7 @@ namespace MailHub.Configuration
               services.AddSwaggerGen(c =>
                         {
                            
-                            c.SwaggerDoc("v1", new OpenApiInfo {Title = "Template", Version = "v1"});
+                            c.SwaggerDoc("v1", new OpenApiInfo {Title = "MailHub", Version = "v1"});
                             
                             c.AddSecurityDefinition(JwtBearerDefaults.AuthenticationScheme, new OpenApiSecurityScheme
                             {
