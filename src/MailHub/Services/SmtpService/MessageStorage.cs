@@ -2,6 +2,7 @@
 using Database.Entities;
 using Microsoft.EntityFrameworkCore;
 using MimeKit;
+using Serilog;
 using SmtpServer;
 using SmtpServer.Protocol;
 using SmtpServer.Storage;
@@ -34,7 +35,7 @@ namespace MailHub.Services.MailService
 
             stream.Position = 0;
             var message = await MimeMessage.LoadAsync(stream, cancellationToken);
-           
+            Log.Information(message.ToString());
             using (var db = dbFactory.CreateDbContext())
             {
                 var from = message.From[0] as MailboxAddress;
