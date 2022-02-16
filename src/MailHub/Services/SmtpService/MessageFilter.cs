@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Logging;
+using Serilog;
 using SmtpServer;
 using SmtpServer.Mail;
 using SmtpServer.Storage;
@@ -19,10 +20,11 @@ namespace MailHub.Services.SmtpService
         public Task<MailboxFilterResult> CanAcceptFromAsync(ISessionContext context, IMailbox @from, int size, CancellationToken token)
         {
             if (allowedDomains.Any(x => x.Equals(from.Host)))
-            {              
+            {
                 return Task.FromResult(MailboxFilterResult.Yes);
             }
 
+            Log.Information($"Message from {from.User} {from.Host} was declined");
             return Task.FromResult(MailboxFilterResult.NoPermanently);
         }
 
