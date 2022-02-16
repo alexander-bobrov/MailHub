@@ -41,5 +41,5 @@ The simplest deployment process could be like that:
 
 To make it work as a service you have some options depending on your environment
  - For Linux based OS you can use **systemd**, follow this instruction: https://dejanstojanovic.net/aspnet/2018/june/setting-up-net-core-servicedaemon-on-linux-os/
- - Or you can use docker for both Linux and Windows, simply build the image with command withing **src** directory **docker build -f MailHub\Dockerfile -t MailHub .**  and run it **docker run MailHub**
+ - Or you can use docker for both Linux and Windows, simply build the image with command within **src** directory **docker build -f MailHub\Dockerfile -t MailHub .**  and run it **docker run MailHub**
 
