@@ -37,7 +37,7 @@ namespace MailHub.Services.MailService
             var message = await MimeMessage.LoadAsync(stream, cancellationToken);
             //Log.Information(message.ToString());
 
-            var sss = message.GetTextBody(MimeKit.Text.TextFormat.Html);
+            var sss = message.GetTextBody(MimeKit.Text.TextFormat.Text);
             Log.Information(sss);
             using (var db = dbFactory.CreateDbContext())
             {
