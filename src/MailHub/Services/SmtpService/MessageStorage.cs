@@ -2,6 +2,7 @@
 using Database.Entities;
 using Microsoft.EntityFrameworkCore;
 using MimeKit;
+using NUglify;
 using Serilog;
 using SmtpServer;
 using SmtpServer.Protocol;
@@ -39,9 +40,10 @@ namespace MailHub.Services.MailService
             var message = await MimeMessage.LoadAsync(stream, cancellationToken);
 
             //todo add switch for plain/text and so on
-            var html = message.GetTextBody(MimeKit.Text.TextFormat.Html);
-            var rawText = HttpUtility.HtmlDecode(Regex.Replace(html, "<(.|\n)*?>", string.Empty));
-            var text = Regex.Replace(rawText, @"^\s*$\n", string.Empty, RegexOptions.Multiline);
+           
+            var s = Uglify.HtmlToText(message.HtmlBody);
+            Log.Information(s.Code);
+            Log.Information(s.ToString());
 
             using (var db = dbFactory.CreateDbContext())
             {
