@@ -1,6 +1,7 @@
 ﻿using Database;
 using Database.Entities;
 using HtmlAgilityPack;
+using MailHub.Utils;
 using Microsoft.EntityFrameworkCore;
 using MimeKit;
 using Serilog;
@@ -40,11 +41,7 @@ namespace MailHub.Services.MailService
             var message = await MimeMessage.LoadAsync(stream, cancellationToken);
 
             //todo add switch for plain/text and so on
-            var doc = new HtmlDocument();
-            doc.LoadHtml(message.HtmlBody);
-            var plainText = doc.DocumentNode.InnerText;
-
-            Log.Information(plainText);
+            var text = HtmlToText.ConvertHtml(message.HtmlBody);
 
             using (var db = dbFactory.CreateDbContext())
             {
@@ -63,7 +60,7 @@ namespace MailHub.Services.MailService
                     FromAddress = from.Address,
                     ToName = to.Name,
                     ToAddress = to.Address,
-                    Text = "",
+                    Text = text,
                     Html = message.HtmlBody,
                     Subject = message.Subject,
                     Attachments = attachments,
