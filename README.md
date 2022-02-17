@@ -27,8 +27,7 @@ There's arm-template for azure that will configure all the environments for you 
  - Find **Load file** button and choose arm-template from this repository
  - Save and fill required field (they're self-explanatory)
  - Hit **Review+Create** button
- - When everything is created go to your resource group, find **DNS zone** resource and fill **A** and **MX** records
- - The previous step also has to be done in the admin panel of DNS register you got DNS from
+ - Don't forget to fill **A** and **MX** records in the admin panel of DNS register you got DNS from
  - Connect to created **Virtual Machine** and follow **Dedicated Server** instruction
 
 ### Dedicated Server
