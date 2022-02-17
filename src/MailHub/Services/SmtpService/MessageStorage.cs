@@ -62,7 +62,7 @@ namespace MailHub.Services.MailService
                     FromAddress = from.Address,
                     ToName = to.Name,
                     ToAddress = to.Address,
-                    Text = text,
+                    Text = "",
                     Html = message.HtmlBody,
                     Subject = message.Subject,
                     Attachments = attachments,
