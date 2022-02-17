@@ -38,9 +38,10 @@ namespace MailHub.Services.MailService
             stream.Position = 0;
             var message = await MimeMessage.LoadAsync(stream, cancellationToken);
 
-            //todo add conditions for plain/text and so on
+            //todo add switch for plain/text and so on
             var html = message.GetTextBody(MimeKit.Text.TextFormat.Html);
-            var text = HttpUtility.HtmlDecode(Regex.Replace(html, "<(.|\n)*?>", ""));
+            var rawText = HttpUtility.HtmlDecode(Regex.Replace(html, "<(.|\n)*?>", string.Empty));
+            var text = Regex.Replace(rawText, @"^\s*$\n", string.Empty, RegexOptions.Multiline);
 
             using (var db = dbFactory.CreateDbContext())
             {
