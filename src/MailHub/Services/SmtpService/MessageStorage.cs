@@ -1,8 +1,8 @@
 ﻿using Database;
 using Database.Entities;
+using HtmlAgilityPack;
 using Microsoft.EntityFrameworkCore;
 using MimeKit;
-using NUglify;
 using Serilog;
 using SmtpServer;
 using SmtpServer.Protocol;
@@ -40,10 +40,15 @@ namespace MailHub.Services.MailService
             var message = await MimeMessage.LoadAsync(stream, cancellationToken);
 
             //todo add switch for plain/text and so on
-           
-            var s = Uglify.HtmlToText(message.HtmlBody);
-            Log.Information(s.Code);
-            Log.Information(s.ToString());
+
+            HtmlDocument doc = new HtmlDocument();
+            doc.LoadHtml(message.HtmlBody);
+
+            var p = (from x in doc.DocumentNode.Descendants()
+                        where x.Name == "p"
+                        select x.InnerHtml).FirstOrDefault();
+
+            Log.Information(p);
 
             using (var db = dbFactory.CreateDbContext())
             {
