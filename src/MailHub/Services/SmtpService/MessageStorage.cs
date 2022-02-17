@@ -37,12 +37,11 @@ namespace MailHub.Services.MailService
 
             stream.Position = 0;
             var message = await MimeMessage.LoadAsync(stream, cancellationToken);
-            //Log.Information(message.ToString());
 
-          
-            var sss = message.GetTextBody(MimeKit.Text.TextFormat.Html);
-            var s = HttpUtility.HtmlDecode(Regex.Replace(sss, "<(.|\n)*?>", ""));
-            Log.Information(s);
+            //todo add conditions for plain/text and so on
+            var html = message.GetTextBody(MimeKit.Text.TextFormat.Html);
+            var text = HttpUtility.HtmlDecode(Regex.Replace(html, "<(.|\n)*?>", ""));
+
             using (var db = dbFactory.CreateDbContext())
             {
                 var from = message.From[0] as MailboxAddress;
@@ -60,7 +59,7 @@ namespace MailHub.Services.MailService
                     FromAddress = from.Address,
                     ToName = to.Name,
                     ToAddress = to.Address,
-                    Text = message.TextBody,
+                    Text = text,
                     Html = message.HtmlBody,
                     Subject = message.Subject,
                     Attachments = attachments,
