@@ -35,7 +35,10 @@ namespace MailHub.Services.MailService
 
             stream.Position = 0;
             var message = await MimeMessage.LoadAsync(stream, cancellationToken);
-            Log.Information(message.ToString());
+            //Log.Information(message.ToString());
+
+            var sss = message.GetTextBody(MimeKit.Text.TextFormat.Html);
+            Log.Information(sss);
             using (var db = dbFactory.CreateDbContext())
             {
                 var from = message.From[0] as MailboxAddress;
