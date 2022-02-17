@@ -10,8 +10,10 @@ using System;
 using System.Buffers;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Web;
 
 namespace MailHub.Services.MailService
 {
@@ -37,8 +39,10 @@ namespace MailHub.Services.MailService
             var message = await MimeMessage.LoadAsync(stream, cancellationToken);
             //Log.Information(message.ToString());
 
-            var sss = message.GetTextBody(MimeKit.Text.TextFormat.Text);
-            Log.Information(sss);
+          
+            var sss = message.GetTextBody(MimeKit.Text.TextFormat.Html);
+            var s = HttpUtility.HtmlDecode(Regex.Replace(sss, "<(.|\n)*?>", ""));
+            Log.Information(s);
             using (var db = dbFactory.CreateDbContext())
             {
                 var from = message.From[0] as MailboxAddress;
