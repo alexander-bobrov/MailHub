@@ -40,11 +40,16 @@ namespace MailHub.Services.MailService
             stream.Position = 0;
             var message = await MimeMessage.LoadAsync(stream, cancellationToken);
 
-            string text;
-            if (message.TextBody is null)
+            string text = null;
+            if (message.TextBody is null && message.HtmlBody is not null)
             {
-                text = message.HtmlBody is not null ? HtmlToText.ConvertHtml(message.HtmlBody) : null;
+                var raw = HtmlToText.ConvertHtml(message.HtmlBody);
+                var formatted = raw.
+                    Replace("\u00a0", string.Empty).
+                    Replace("\r", string.Empty);
+                text = formatted;
             }
+
 
             using (var db = dbFactory.CreateDbContext())
             {
