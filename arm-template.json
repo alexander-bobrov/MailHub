@@ -2,10 +2,6 @@
     "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
-        "dnszones": {
-            "defaultValue": "mailhub.com",
-            "type": "String"
-        },
         "vm_name": {
             "defaultValue": "mail-hub-vm",
             "type": "String"
@@ -44,15 +40,6 @@
             "location": "westeurope",
             "properties": {
                 "publicKey": "[parameters('sshPublicKey_value')]"
-            }
-        },
-        {
-            "type": "Microsoft.Network/dnszones",
-            "apiVersion": "2018-05-01",
-            "name": "[parameters('dnszones')]",
-            "location": "global",
-            "properties": {
-                "zoneType": "Public"
             }
         },
         {
@@ -245,53 +232,6 @@
                         "enabled": true
                     }
                 }
-            }
-        },
-        {
-            "type": "Microsoft.Network/dnszones/A",
-            "apiVersion": "2018-05-01",
-            "name": "[concat(parameters('dnszones'), '/@')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Network/dnszones', parameters('dnszones'))]"
-            ],
-            "properties": {
-                "TTL": 3600,
-                "ARecords": [],
-                "targetResource": {}
-            }
-        },
-        {
-            "type": "Microsoft.Network/dnszones/MX",
-            "apiVersion": "2018-05-01",
-            "name": "[concat(parameters('dnszones'), '/mail')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Network/dnszones', parameters('dnszones'))]"
-            ],
-            "properties": {
-                "TTL": 3600,
-                "MXRecords": [],
-                "targetResource": {}
-            }
-        },
-        {
-            "type": "Microsoft.Network/dnszones/SOA",
-            "apiVersion": "2018-05-01",
-            "name": "[concat(parameters('dnszones'), '/@')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Network/dnszones', parameters('dnszones'))]"
-            ],
-            "properties": {
-                "TTL": 3600,
-                "SOARecord": {
-                    "email": "azuredns-hostmaster.microsoft.com",
-                    "expireTime": 2419200,
-                    "host": "ns1-33.azure-dns.com.",
-                    "minimumTTL": 300,
-                    "refreshTime": 3600,
-                    "retryTime": 300,
-                    "serialNumber": 1
-                },
-                "targetResource": {}
             }
         },
         {
