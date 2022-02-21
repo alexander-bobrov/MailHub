@@ -40,8 +40,11 @@ namespace MailHub.Services.MailService
             stream.Position = 0;
             var message = await MimeMessage.LoadAsync(stream, cancellationToken);
 
-            //todo add switch for plain/text and so on
-            var text = HtmlToText.ConvertHtml(message.HtmlBody);
+            string text;
+            if (message.TextBody is null)
+            {
+                text = message.HtmlBody is not null ? HtmlToText.ConvertHtml(message.HtmlBody) : null;
+            }
 
             using (var db = dbFactory.CreateDbContext())
             {
