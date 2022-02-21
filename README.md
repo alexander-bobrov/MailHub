@@ -37,6 +37,7 @@ The simplest deployment process could be like that:
  - **dotnet build -c release** within cloned directory
  - Edit appsettings.json according to your needs
  - Now you can run it for test **dotnet MailHub.dll --urls "http://example.site.com:5001"**
+ - Swagger documentation will be available on **http://example.site.com:5001/swagger**
 
 To make it work as a service you have some options depending on your environment
  - For Linux based OS you can use **systemd**, follow this instruction: https://dejanstojanovic.net/aspnet/2018/june/setting-up-net-core-servicedaemon-on-linux-os/
