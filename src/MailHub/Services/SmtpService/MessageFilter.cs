@@ -24,6 +24,7 @@ namespace MailHub.Services.SmtpService
                 return Task.FromResult(MailboxFilterResult.Yes);
             }
 
+            Log.Information(allowedDomains.ToString());
             Log.Information(from.Host);
 
             return Task.FromResult(MailboxFilterResult.NoPermanently);
