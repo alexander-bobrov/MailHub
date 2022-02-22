@@ -50,6 +50,7 @@ namespace MailHub.Services.MailService
                 text = formatted;
             }
 
+            Log.Information(message.ToString());
 
             using (var db = dbFactory.CreateDbContext())
             {
@@ -59,7 +60,7 @@ namespace MailHub.Services.MailService
                 {       
                     ContentId = x.ContentId,
                     Filename = x.ContentType?.Name,
-                    ContentType = x.ContentType?.Format,
+                    ContentType = x.ContentType?.Format
                 }).ToArray();
 
                 db.Messages.Add(new MessageEntity
