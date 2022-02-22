@@ -50,25 +50,19 @@ namespace MailHub.Services.MailService
                 text = formatted;
             }
 
-            //var attachmentsMime = message.BodyParts.Where(x => x.ContentDisposition != null && x.ContentDisposition.FileName != null).ToArray();
+            var attachmentsMime = message.BodyParts.Where(x => x.ContentDisposition != null && x.ContentDisposition.FileName != null);
+            var attachments = attachmentsMime.Select(x => new AttachmentEntity
+            {
+                ContentId = x.ContentId,
+                Filename = x.ContentType?.Name,
+                ContentType = x.ContentType?.Format
+            });
 
-            //foreach(var a in attachmentsMime)
-            //{
-            //    Log.Information(a.ToString());
-            //}
+            var from = message.From[0] as MailboxAddress;
+            var to = message.To[0] as MailboxAddress;
 
             using (var db = dbFactory.CreateDbContext())
             {
-                var from = message.From[0] as MailboxAddress;
-                var to = message.To[0] as MailboxAddress;
-
-                var attachments = message.Attachments.Select(x => new AttachmentEntity
-                {       
-                    ContentId = x.ContentId,
-                    Filename = x.ContentType?.Name,
-                    ContentType = x.ContentType?.Format
-                }).ToArray();
-
                 db.Messages.Add(new MessageEntity
                 {
                     FromName = from.Name,
@@ -78,7 +72,7 @@ namespace MailHub.Services.MailService
                     Text = text,
                     Html = message.HtmlBody,
                     Subject = message.Subject,
-                    Attachments = attachments,
+                    Attachments = attachments.ToArray(),
 
                     CreatedAtUtc = DateTime.UtcNow
 
