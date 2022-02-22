@@ -10,6 +10,7 @@ using SmtpServer.Protocol;
 using SmtpServer.Storage;
 using System;
 using System.Buffers;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -50,14 +51,21 @@ namespace MailHub.Services.MailService
                 text = formatted;
             }
 
-            var attachmentsMime = message.BodyParts.Where(x => x.ContentDisposition != null && x.ContentDisposition.FileName != null);
-            var attachments = attachmentsMime.Select(x => new AttachmentEntity
+            var attachments = Array.Empty<AttachmentEntity>();
+            if (!message.Attachments.Any())
             {
-                ContentId = x.ContentId,
-                Filename = x.ContentType?.Name,
-                ContentType = x.ContentType?.Format
-            });
-
+                attachments = message.BodyParts
+                    .Where(x => x.ContentDisposition != null && x.ContentDisposition.FileName != null)
+                    .Select(x => new AttachmentEntity
+                     {
+                       ContentId = x.ContentId,
+                       Filename = x.ContentType?.Name,
+                       ContentType = x.ContentType?.Format
+                     })
+                    .ToArray();
+            }
+           
+           
             var from = message.From[0] as MailboxAddress;
             var to = message.To[0] as MailboxAddress;
 
@@ -72,7 +80,7 @@ namespace MailHub.Services.MailService
                     Text = text,
                     Html = message.HtmlBody,
                     Subject = message.Subject,
-                    Attachments = attachments.ToArray(),
+                    Attachments = attachments,
 
                     CreatedAtUtc = DateTime.UtcNow
 
