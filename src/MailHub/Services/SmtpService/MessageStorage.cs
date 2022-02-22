@@ -50,9 +50,7 @@ namespace MailHub.Services.MailService
                 text = formatted;
             }
 
-            Log.Information(message.ToString());
-
-            var attachmentsMime = message.BodyParts.Where(x => x.ContentDisposition != null && x.ContentDisposition.FileName != null);
+            var attachmentsMime = message.BodyParts.Where(x => x.ContentDisposition != null && x.ContentDisposition.FileName != null).ToArray();
 
             Log.Information(attachmentsMime.ToString());
 
