@@ -52,7 +52,10 @@ namespace MailHub.Services.MailService
 
             var attachmentsMime = message.BodyParts.Where(x => x.ContentDisposition != null && x.ContentDisposition.FileName != null).ToArray();
 
-            Log.Information(attachmentsMime.ToString());
+            foreach(var a in attachmentsMime)
+            {
+                Log.Information(a.ToString());
+            }
 
             using (var db = dbFactory.CreateDbContext())
             {

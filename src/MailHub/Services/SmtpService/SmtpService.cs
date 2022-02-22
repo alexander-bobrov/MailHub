@@ -53,6 +53,7 @@ namespace MailHub.Services.MailService
                 throw task.Exception;
             }
             logger.LogInformation("Smtp server has been started and ready to recieve e-mails");
+            logger.LogInformation($"Settings are: {this.options}");
 
             return Task.CompletedTask;
         }
