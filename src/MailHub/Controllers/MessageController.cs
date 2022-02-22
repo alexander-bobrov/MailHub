@@ -36,6 +36,14 @@ namespace MailHub.Controllers
             return Ok(messages);
         }
 
+        [HttpDelete("cleanup-mailbox")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<IActionResult> Cleanup(string mailbox)
+        {
+            await messageService.DeleteMessages(mailbox);
+            return Ok();
+        }
+
 #if DEBUG
         [HttpGet("get-all-messages")]
         [ProducesResponseType(StatusCodes.Status200OK)]

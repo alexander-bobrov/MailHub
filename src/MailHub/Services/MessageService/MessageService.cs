@@ -22,6 +22,13 @@ namespace MailHub.Services.MessageService
             this.logger = logger;
         }
 
+        public async Task DeleteMessages(string mailbox)
+        {
+            using var db = dbFactory.CreateDbContext();
+            var messages = db.Messages.Where(x => x.ToAddress == mailbox);
+            db.RemoveRange(messages);
+            await db.SaveChangesAsync();
+        }
         public async Task<Message[]> GetBasedOnAuthor(string authorEmail, string subject)
         {
             return await GetMessages(x => x.FromAddress == authorEmail && x.Subject == subject);
@@ -35,8 +42,6 @@ namespace MailHub.Services.MessageService
         private async Task<Message[]> GetMessages(Expression<Func<MessageEntity, bool>> filter)
         {
             using var db = dbFactory.CreateDbContext();
-            var sw = new Stopwatch();
-            sw.Start();
             var messages = db.Messages.AsNoTracking().Where(filter)
                 .OrderByDescending(o => o.CreatedAtUtc)
                 .Select(m => new Message
@@ -54,11 +59,7 @@ namespace MailHub.Services.MessageService
                     }).ToArray()
                 });
     
-            sw.Stop();
-            var result = await messages.ToArrayAsync();
-
-            logger.LogInformation($"{result.Length} messages have been retrieved from DB for {sw.ElapsedMilliseconds}ms");
-            return result;
+            return await messages.ToArrayAsync();
         }
 
 #if DEBUG
