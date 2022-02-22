@@ -1,6 +1,4 @@
-﻿using Microsoft.Extensions.Logging;
-using Serilog;
-using SmtpServer;
+﻿using SmtpServer;
 using SmtpServer.Mail;
 using SmtpServer.Storage;
 using System.Linq;
@@ -23,12 +21,6 @@ namespace MailHub.Services.SmtpService
             {
                 return Task.FromResult(MailboxFilterResult.Yes);
             }
-
-            foreach(var d in allowedDomains)
-            {
-                Log.Information(d);
-            }
-            Log.Information(from.Host);
 
             return Task.FromResult(MailboxFilterResult.NoPermanently);
         }
