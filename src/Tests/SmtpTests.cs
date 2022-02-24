@@ -58,14 +58,14 @@ namespace Tests
                 TextBody = "Test message"
             };
 
-            var image = builder.LinkedResources.Add("attachment.jpg");
+            var image = builder.LinkedResources.Add("attachment.png");
             image.ContentId = MimeUtils.GenerateMessageId();
             builder.HtmlBody = string.Format(@"<p>Hey!</p><img src=""cid:{0}"">", image.ContentId);
 
             message.Body = builder.ToMessageBody();
 
             using var client = new SmtpClient(new ProtocolLogger("smtp.log"));
-            client.Connect("127.0.0.1", 25, false);
+            client.Connect("localhost", 25, false);
             client.Send(message);
             client.Disconnect(true);
         }

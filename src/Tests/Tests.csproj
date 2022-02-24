@@ -34,7 +34,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="attachment.jpg">
+    <None Update="attachment.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
