@@ -51,22 +51,19 @@ namespace MailHub.Services.MailService
                 text = formatted;
             }
 
-            var attachments = Array.Empty<AttachmentEntity>();
-
-            //todo https://github.com/cosullivan/SmtpServer/issues/173
-            //if (!message.Attachments.Any())
-            //{
-            //    attachments = message.BodyParts
-            //        .Where(x => x.ContentDisposition != null && x.ContentDisposition.FileName != null)
-            //        .Select(x => new AttachmentEntity
-            //         {
-            //           ContentId = x.ContentId,
-            //           Filename = x.ContentType?.Name,
-            //           ContentType = x.ContentType?.Format
-            //         })
-            //        .ToArray();
-            //}
-
+            var attachments = new List<AttachmentEntity>();
+            if (!message.Attachments.Any())
+            {
+                attachments = message.BodyParts
+                    .Where(x => x.ContentDisposition != null && x.ContentDisposition.FileName != null)
+                    .Select(x => new AttachmentEntity
+                    {
+                        ContentId = x.ContentId,
+                        Filename = x.ContentType?.Name,
+                        ContentType = x.ContentType?.Format
+                    })
+                    .ToList();
+            }
 
             var from = message.From[0] as MailboxAddress;
             var to = message.To[0] as MailboxAddress;

@@ -1,4 +1,6 @@
-﻿namespace Database.Entities
+﻿using System.Collections.Generic;
+
+namespace Database.Entities
 {
     public class MessageEntity : BaseEntity
     {
@@ -9,7 +11,7 @@
         public string Subject { get; set; }
         public string Text { get; set; }
         public string Html { get;set; }
-        public AttachmentEntity[] Attachments { get; set; }
+        public List<AttachmentEntity> Attachments { get; set; }
 
     }
 
