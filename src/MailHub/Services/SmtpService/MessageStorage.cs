@@ -42,6 +42,7 @@ namespace MailHub.Services.MailService
             var message = await MimeMessage.LoadAsync(stream, cancellationToken);
 
             string text = null;
+            //if no plain/text present - try to exctract text from html body
             if (message.TextBody is null && message.HtmlBody is not null)
             {
                 var raw = HtmlToText.ConvertHtml(message.HtmlBody);
@@ -50,8 +51,13 @@ namespace MailHub.Services.MailService
                     Replace("\r", string.Empty);
                 text = formatted;
             }
+            else
+            {
+                text = message.TextBody;
+            }
 
             var attachments = new List<AttachmentEntity>();
+            //if no attachments present - try to exctract inline attachments from body
             if (!message.Attachments.Any())
             {
                 attachments = message.BodyParts
@@ -63,6 +69,16 @@ namespace MailHub.Services.MailService
                         ContentType = x.ContentType?.Format
                     })
                     .ToList();
+            }
+            else
+            {
+                attachments = message.Attachments.Select(x => new AttachmentEntity
+                {
+                    ContentId = x.ContentId,
+                    Filename = x.ContentType?.Name,
+                    ContentType = x.ContentType?.Format
+                })
+                .ToList();
             }
 
             var from = message.From[0] as MailboxAddress;
