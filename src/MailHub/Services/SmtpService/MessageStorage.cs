@@ -1,10 +1,8 @@
 ﻿using Database;
 using Database.Entities;
-using HtmlAgilityPack;
 using MailHub.Utils;
 using Microsoft.EntityFrameworkCore;
 using MimeKit;
-using Serilog;
 using SmtpServer;
 using SmtpServer.Protocol;
 using SmtpServer.Storage;
@@ -13,14 +11,12 @@ using System.Buffers;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Web;
 
 namespace MailHub.Services.MailService
 {
-    public class MessageStorage : MessageStore
+    public class MessageStorage : IMessageStore
     {
         private readonly IDbContextFactory<MailHubContext> dbFactory;
 
@@ -28,7 +24,7 @@ namespace MailHub.Services.MailService
         {
             this.dbFactory = dbFactory;
         }
-        public override async Task<SmtpResponse> SaveAsync(ISessionContext context, IMessageTransaction transaction, ReadOnlySequence<byte> buffer, CancellationToken cancellationToken)
+        public async Task<SmtpResponse> SaveAsync(ISessionContext context, IMessageTransaction transaction, ReadOnlySequence<byte> buffer, CancellationToken cancellationToken)
         {
             await using var stream = new MemoryStream();
 

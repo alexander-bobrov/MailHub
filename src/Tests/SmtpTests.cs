@@ -83,8 +83,8 @@ namespace Tests
                 Text = @"It's a test message with attachment"
             };
 
-            var file = "attachment.jpg";
-            var attachment = new MimePart("image", "jpeg")
+            var file = "attachment.png";
+            var attachment = new MimePart("image", "png")
             {
                 Content = new MimeContent(File.OpenRead(file), ContentEncoding.Default),
                 ContentDisposition = new ContentDisposition(ContentDisposition.Attachment),

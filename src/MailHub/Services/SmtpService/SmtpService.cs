@@ -1,17 +1,13 @@
 ﻿
 using Database;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using SmtpServer;
-using SmtpServer.ComponentModel;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
 using MailHub.Services.MailService.Configuration;
-using MailHub.Services.SmtpService;
 
 namespace MailHub.Services.MailService
 {
@@ -20,32 +16,18 @@ namespace MailHub.Services.MailService
         private SmtpServer.SmtpServer server;
         private readonly SmtpOptions options;
         private readonly ILogger<SmtpService> logger;
-        private readonly IDbContextFactory<MailHubContext> dbFactory;
 
         public void Dispose(){}
 
-        public SmtpService(ILogger<SmtpService> logger, IOptions<SmtpOptions> options, IDbContextFactory<MailHubContext> dbFactory)
+        public SmtpService(SmtpServer.SmtpServer server, ILogger<SmtpService> logger, IOptions<SmtpOptions> options)
         {
             this.options = options.Value;
+            this.server = server;
             this.logger = logger;
-            this.dbFactory = dbFactory;
         }
 
         public Task StartAsync(CancellationToken cancellationToken)
         {
-            var options = new SmtpServerOptionsBuilder()
-            .ServerName(this.options.ServerName)
-            .Port(25, 587)
-            .Build();
-
-            
-            var sp = new SmtpServer.ComponentModel.ServiceProvider();
-            sp.Add(new MessageFilter(this.options.AllowedDomains));
-            sp.Add(new MessageStorage(dbFactory));
-
-            server = new SmtpServer.SmtpServer(options, sp);
-
-            //idk why but it's a blocking call so
             var task = server.StartAsync(cancellationToken);
             if (task.IsFaulted)
             {
