@@ -62,7 +62,7 @@ namespace MailHub.Services.MailService
                     {
                         ContentId = x.ContentId,
                         Filename = x.ContentType?.Name,
-                        ContentType = x.ContentType?.Format
+                        ContentType = x.ContentType?.MimeType
                     })
                     .ToList();
             }
