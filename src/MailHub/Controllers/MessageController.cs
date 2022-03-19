@@ -24,7 +24,7 @@ namespace MailHub.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<IActionResult> GetByAuthor(string address, string subject)
         {
-            var messages = await messageService.GetBasedOnAuthor(address, subject);
+            var messages = await messageService.GetBasedOnAuthorAsync(address, subject);
             return Ok(messages);
         }
 
@@ -32,7 +32,7 @@ namespace MailHub.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<IActionResult> GetByRecipient(string address, string subject)
         {
-            var messages = await messageService.GetBasedOnRecipient(address, subject);
+            var messages = await messageService.GetBasedOnRecipientAsync(address, subject);
             return Ok(messages);
         }
 
@@ -40,7 +40,7 @@ namespace MailHub.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<IActionResult> Cleanup(string mailbox)
         {
-            await messageService.DeleteMessages(mailbox);
+            await messageService.DeleteMessagesAsync(mailbox);
             return Ok();
         }
 
@@ -49,7 +49,7 @@ namespace MailHub.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<IActionResult> GetAll()
         {
-            var messages = await messageService.GetAll();
+            var messages = await messageService.GetAllMessagesAsync();
             return Ok(messages);
         }
 #endif

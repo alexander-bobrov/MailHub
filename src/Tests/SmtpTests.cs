@@ -1,29 +1,26 @@
-using Database.Configuration;
 using MailKit.Net.Smtp;
 using Microsoft.AspNetCore;
-using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
 using MimeKit;
 using NUnit.Framework;
-using MailHub.Services.MailService.Configuration;
 using System.IO;
 using MimeKit.Utils;
-using MailKit;
-using System;
+using MailHub.Services.MessageService;
+using System.Threading.Tasks;
 
 namespace Tests
 {
     public class SmtpTests
     {
+        private IWebHost _webHost;
         [SetUp]
         public void Setup()
         {
-            WebHost.CreateDefaultBuilder()
-                .UseStartup<StartupTest>()
-                .Build()
-                .RunAsync();
+            _webHost = WebHost.CreateDefaultBuilder()
+                .UseStartup<TestStartup>()
+                .Build();
+
+            _webHost.RunAsync();
         }
 
         [Test]
@@ -43,10 +40,12 @@ namespace Tests
             client.Connect("127.0.0.1", 25, false);
             client.Send(message);
             client.Disconnect(true);
+
+           
         }
 
         [Test]
-        public void SendMail_WithInlineAttachments_Should_BeOk()
+        public async Task SendMail_WithInlineAttachments_Should_BeOk()
         {
             var message = new MimeMessage();
             message.From.Add(new MailboxAddress("Mr.Test", "mr@test.com"));
@@ -64,10 +63,15 @@ namespace Tests
 
             message.Body = builder.ToMessageBody();
 
-            using var client = new SmtpClient(new ProtocolLogger("smtp.log"));
+            using var client = new SmtpClient();
             client.Connect("localhost", 25, false);
             client.Send(message);
             client.Disconnect(true);
+
+            var messageService = _webHost.Services.GetService(typeof(MessageService)) as MessageService;
+#pragma warning disable CS8602 // Dereference of a possibly null reference.
+            await messageService.DeleteMessagesAsync("mrs@test.com");
+#pragma warning restore CS8602 // Dereference of a possibly null reference.
         }
 
         [Test]
@@ -106,24 +110,5 @@ namespace Tests
             client.Disconnect(true);
         }
     
-    }
-
-    public class StartupTest 
-    {
-        private readonly IConfiguration _configuration;
-
-        public StartupTest(IConfiguration configuration)
-        {
-            _configuration = configuration;
-        }
-
-        public void ConfigureServices(IServiceCollection services)
-        {
-            services.AddDatabase(_configuration);
-            services.UseSmtpService(_configuration);
-        }
-
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env) { }
-
     }
 }

@@ -22,24 +22,24 @@ namespace MailHub.Services.MessageService
             this.logger = logger;
         }
 
-        public async Task DeleteMessages(string mailbox)
+        public async Task DeleteMessagesAsync(string mailbox)
         {
             using var db = dbFactory.CreateDbContext();
             var messages = db.Messages.Where(x => x.ToAddress == mailbox);
             db.RemoveRange(messages);
             await db.SaveChangesAsync();
         }
-        public async Task<Message[]> GetBasedOnAuthor(string authorEmail, string subject)
+        public async Task<Message[]> GetBasedOnAuthorAsync(string authorEmail, string subject)
         {
-            return await GetMessages(x => x.FromAddress == authorEmail && x.Subject == subject);
+            return await GetMessagesAsync(x => x.FromAddress == authorEmail && x.Subject == subject);
         }
 
-        public async Task<Message[]> GetBasedOnRecipient(string recipientEmail, string subject)
+        public async Task<Message[]> GetBasedOnRecipientAsync(string recipientEmail, string subject)
         {
-            return await GetMessages(x => x.ToAddress == recipientEmail && x.Subject == subject);
+            return await GetMessagesAsync(x => x.ToAddress == recipientEmail && x.Subject == subject);
         }
 
-        private async Task<Message[]> GetMessages(Expression<Func<MessageEntity, bool>> filter)
+        private async Task<Message[]> GetMessagesAsync(Expression<Func<MessageEntity, bool>> filter)
         {
             using var db = dbFactory.CreateDbContext();
             var messages = db.Messages.AsNoTracking().Where(filter)
@@ -63,7 +63,7 @@ namespace MailHub.Services.MessageService
         }
 
 #if DEBUG
-        public async Task<Message[]> GetAll()
+        public async Task<Message[]> GetAllMessagesAsync()
         {
             using var db = dbFactory.CreateDbContext();
 
