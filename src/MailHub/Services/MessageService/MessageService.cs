@@ -56,7 +56,9 @@ namespace MailHub.Services.MessageService
                         ContentId = x.ContentId,
                         Filename = x.Filename,
                         ContentType = x.ContentType,
-                    }).ToArray()
+                    })
+                    .OrderBy(x => x.ContentType)
+                    .ToArray()
                 });
     
             return await messages.ToArrayAsync();
