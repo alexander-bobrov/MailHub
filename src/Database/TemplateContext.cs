@@ -10,9 +10,7 @@ namespace Database
             Database.EnsureCreated();
         }
 
-        //dotnet ef migrations add --startup-project MailHub --project Database Initial
         public DbSet<MessageEntity> Messages { get; set; }
-
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<MessageEntity>()
@@ -20,10 +18,5 @@ namespace Database
             .WithOne()
             .OnDelete(DeleteBehavior.Cascade);
         }
-
     }
-
-   
-
-
 }

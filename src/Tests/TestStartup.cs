@@ -20,8 +20,8 @@ namespace Tests
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDatabase(_configuration);
-            services.UseSmtpService(_configuration);
-            services.UseMessageService(_configuration);
+            services.AddSmtpService(_configuration);
+            services.AddMessageService(_configuration);
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env) { }

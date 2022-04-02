@@ -22,9 +22,9 @@ namespace MailHub
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDatabase(_configuration);          
-            services.UseBackgroundCleanup(_configuration);
-            services.UseSmtpService(_configuration);
-            services.UseMessageService(_configuration);
+            services.AddBackgroundCleanup(_configuration);
+            services.AddSmtpService(_configuration);
+            services.AddMessageService(_configuration);
 
             services.AddControllers();
             services.AddSwagger();
